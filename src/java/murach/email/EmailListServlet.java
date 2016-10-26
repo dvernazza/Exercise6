@@ -3,8 +3,10 @@ package murach.email;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-
+import java.util.GregorianCalendar;
+import java.util.Calendar;
 import murach.business.User;
+import murach.business.Year;
 import murach.data.UserDB;
 
 public class EmailListServlet extends HttpServlet {
@@ -30,10 +32,13 @@ public class EmailListServlet extends HttpServlet {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String email = request.getParameter("email");
-
+            
+           GregorianCalendar currentDate = new GregorianCalendar();
+            int currentYear = currentDate.get(Calendar.YEAR);
+           
             // store data in User object
             User user = new User(firstName, lastName, email);
-
+            Year year = new Year(currentYear);
             // validate the parameters
             String message;
             if (firstName == null || lastName == null || email == null ||
@@ -48,6 +53,8 @@ public class EmailListServlet extends HttpServlet {
             }
             request.setAttribute("user", user);
             request.setAttribute("message", message);
+            request.setAttribute("year", year);
+            
         }
         getServletContext()
                 .getRequestDispatcher(url)
